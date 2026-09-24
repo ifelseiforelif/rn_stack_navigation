@@ -1,13 +1,9 @@
-import { Button, Text, View } from "react-native";
-import { RootStackParamList } from "../navigation/AppNavigator";
-import { NativeStackScreenProps } from "@react-navigation/native-stack";
-type Props = NativeStackScreenProps<RootStackParamList, "Details">;
+import { Text, View } from "react-native";
 
-export default function DetailsScreen({ route }: Props) {
-  const { username } = route.params;
+export default function DetailsScreen() {
   return (
     <View>
-      <Text>Деталі про користувача {username}</Text>
+      <Text>Деталі про користувача</Text>
     </View>
   );
 }

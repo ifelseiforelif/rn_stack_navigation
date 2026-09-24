@@ -1,21 +1,60 @@
-import { createNativeStackNavigator } from "@react-navigation/native-stack";
 import HomeScreen from "../screens/HomeScreen";
 import ProfileScreen from "../screens/ProfileScreen";
 import DetailsScreen from "../screens/DetailsScreen";
+import { Image } from "react-native";
+import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
 
-export type RootStackParamList = {
+export type RootTabParamList = {
   Home: undefined;
-  Profile: undefined;
-  Details: { username: string };
+  Profile: { userId: number };
+  Details: undefined;
 };
+const Tab = createBottomTabNavigator<RootTabParamList>();
 
-const Stack = createNativeStackNavigator<RootStackParamList>();
 export default function AppNavigator() {
   return (
-    <Stack.Navigator>
-      <Stack.Screen name="Home" component={HomeScreen} />
-      <Stack.Screen name="Profile" component={ProfileScreen} />
-      <Stack.Screen name="Details" component={DetailsScreen} />
-    </Stack.Navigator>
+    <Tab.Navigator>
+      <Tab.Screen
+        name="Home"
+        component={HomeScreen}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={require("../../assets/home.png")}
+              style={{
+                width: 24,
+                height: 24,
+                opacity: focused ? 1 : 0.5,
+              }}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Details"
+        component={DetailsScreen}
+        options={{
+          tabBarIcon: ({ focused }) => (
+            <Image
+              source={require("../../assets/details.png")}
+              style={{
+                width: 24,
+                height: 24,
+                opacity: focused ? 1 : 0.5,
+              }}
+            />
+          ),
+        }}
+      />
+      <Tab.Screen
+        name="Profile"
+        component={ProfileScreen}
+        listeners={() => ({
+          tabPress: () => {
+            console.log(`Clicked ProfileTab`);
+          },
+        })}
+      />
+    </Tab.Navigator>
   );
 }
