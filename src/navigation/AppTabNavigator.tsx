@@ -1,17 +1,17 @@
 import HomeScreen from "../screens/HomeScreen";
 import ProfileScreen from "../screens/ProfileScreen";
-import DetailsScreen from "../screens/DetailsScreen";
 import { Image } from "react-native";
 import { createBottomTabNavigator } from "@react-navigation/bottom-tabs";
+import DetailsStack from "./DetailsStack";
 
 export type RootTabParamList = {
   Home: undefined;
-  Profile: { userId: number };
+  Profile: undefined;
   Details: undefined;
 };
 const Tab = createBottomTabNavigator<RootTabParamList>();
 
-export default function AppNavigator() {
+export default function AppTabNavigator() {
   return (
     <Tab.Navigator>
       <Tab.Screen
@@ -32,7 +32,7 @@ export default function AppNavigator() {
       />
       <Tab.Screen
         name="Details"
-        component={DetailsScreen}
+        component={DetailsStack}
         options={{
           tabBarIcon: ({ focused }) => (
             <Image
