@@ -1,4 +1,4 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+//import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState } from "react";
 import { Alert, View, Text, TextInput, Button } from "react-native";
 import { styles } from "../styles/book.styles";
@@ -24,14 +24,15 @@ export const AddBookScreen = ({ navigation }: any) => {
         [uuidv4(), title, author],
       );
 
-      const storedBooks = await AsyncStorage.getItem("books");
+      const storedBooks = await dbService.getAll("SELECT * FROM books");
+      //const storedBooks = await AsyncStorage.getItem("books");
 
-      const books = storedBooks ? JSON.parse(storedBooks) : [];
+      const books = storedBooks.length > 0 ? storedBooks : [];
 
       const newBook = { title, author };
       books.push(newBook);
 
-      await AsyncStorage.setItem("books", JSON.stringify(books));
+      //await AsyncStorage.setItem("books", JSON.stringify(books));
 
       setTitle("");
       setAuthor("");

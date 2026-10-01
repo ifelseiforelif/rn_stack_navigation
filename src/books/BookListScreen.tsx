@@ -1,16 +1,20 @@
-import AsyncStorage from "@react-native-async-storage/async-storage";
+//import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useFocusEffect } from "@react-navigation/native";
 import { useCallback, useState } from "react";
 import { View, Text, FlatList } from "react-native";
 import { IBook } from "../interfaces/IBook";
 import { styles } from "../styles/book.styles";
+import { DbSqliteService } from "../utills/DbSqliteService";
 
 export const BookListScreen = () => {
   const [books, setBooks] = useState<Array<IBook>>([]);
 
   const loadBooks = async () => {
-    const storedBooks = await AsyncStorage.getItem("books");
-    if (storedBooks) setBooks(JSON.parse(storedBooks));
+    const dbService = await DbSqliteService.getInstance();
+    const storedBooks = await dbService.getAll<IBook>("SELECT * FROM books");
+    //const storedBooks = await AsyncStorage.getItem("books");
+
+    if (storedBooks) setBooks(storedBooks);
   };
 
   useFocusEffect(
