@@ -4,37 +4,24 @@ import { BookListScreen } from "./src/books/BookListScreen";
 import { AddBookScreen } from "./src/books/AddBookScreen";
 import * as SQLite from "expo-sqlite";
 import { useEffect } from "react";
+import { DbSqliteService } from "./src/utills/DbSqliteService";
 
 const Drawer = createDrawerNavigator();
 
-let db: SQLite.SQLiteDatabase | null = null;
 export default function App() {
-  const createTable = async () => {
-    if (!db) return;
-    const table = "books";
-    await db.execAsync(`
-      CREATE TABLE IF NOT EXISTS ${table} (
-        id TEXT PRIMARY KEY,
-        title TEXT NOT NULL,
-        author TEXT NOT NULL
-      );
-    `);
-    console.log(`Таблиця ${table} створена`);
-  };
-
-  // Підключаємось до БД асінхронно
-  const openDatabase = async () => {
-    try {
-      db = await SQLite.openDatabaseAsync("library.db");
-      console.log("База даних відкрита");
-      createTable();
-    } catch (err) {
-      console.log("Помилка при відкритті бази даних", err);
-    }
-  };
-
   useEffect(() => {
-    openDatabase();
+    const createDbAndTable = async () => {
+      try {
+        const dbService = await DbSqliteService.getInstance();
+        await dbService.createTable(
+          "books",
+          "id TEXT PRIMARY KEY, title TEXT NOT NULL, author TEXT NOT NULL",
+        );
+      } catch (err) {
+        console.log("Помилка при створенні бази даних та таблиці", err);
+      }
+    };
+    createDbAndTable();
   }, []);
   return (
     <NavigationContainer>

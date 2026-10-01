@@ -2,6 +2,9 @@ import AsyncStorage from "@react-native-async-storage/async-storage";
 import { useState } from "react";
 import { Alert, View, Text, TextInput, Button } from "react-native";
 import { styles } from "../styles/book.styles";
+import { DbSqliteService } from "../utills/DbSqliteService";
+import "react-native-get-random-values";
+import { v4 as uuidv4 } from "uuid";
 
 export const AddBookScreen = ({ navigation }: any) => {
   const [title, setTitle] = useState("");
@@ -14,7 +17,15 @@ export const AddBookScreen = ({ navigation }: any) => {
     }
 
     try {
+      // Сохраняем книгу в SQLite
+      const dbService = await DbSqliteService.getInstance();
+      await dbService.execute(
+        "INSERT INTO books (id, title, author) VALUES (?, ?, ?)",
+        [uuidv4(), title, author],
+      );
+
       const storedBooks = await AsyncStorage.getItem("books");
+
       const books = storedBooks ? JSON.parse(storedBooks) : [];
 
       const newBook = { title, author };
