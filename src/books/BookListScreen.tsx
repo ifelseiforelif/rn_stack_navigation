@@ -24,7 +24,7 @@ export const BookListScreen = () => {
       <Text style={styles.title}>Список книг</Text>
       <FlatList
         data={books}
-        keyExtractor={(item, index) => index.toString()}
+        keyExtractor={(_, index) => index.toString()}
         renderItem={({ item }) => (
           <View style={styles.bookItem}>
             <Text style={styles.bookTitle}>{item.title}</Text>
